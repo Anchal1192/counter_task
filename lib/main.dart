@@ -286,117 +286,157 @@ class CurrencyPairList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return ListView.builder(
-      itemCount: currencyPairs.length,
-      itemBuilder: (context, index) {
-        final currencyPair = currencyPairs[index];
-        String mainPart = currencyPair.bid.length > 2 ? currencyPair.bid.substring(0, currencyPair.bid.length - 2) : currencyPair.bid;
-        String lastTwoDigits =  currencyPair.bid.length > 2 ?  currencyPair.bid.substring(currencyPair.bid.length - 2) : "";
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: ListView.builder(
+        itemCount: currencyPairs.length,
+        itemBuilder: (context, index) {
+          final currencyPair = currencyPairs[index];
+          String mainPart = currencyPair.bid.length > 2 ? currencyPair.bid.substring(0, currencyPair.bid.length - 2) : currencyPair.bid;
+          String lastTwoDigits =  currencyPair.bid.length > 2 ?  currencyPair.bid.substring(currencyPair.bid.length - 2) : "";
 
-        return ListTile(
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-          Row(
-            children: [
-              Text(
-                '${currencyPair.change.toStringAsFixed(2)}',
-                style: TextStyle(
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+            Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                  Row(
+                    children: [
+                      Text(
+                        '${currencyPair.change.toStringAsFixed(2)}',
+                        style: TextStyle(
+            color: Colors.grey
+                        ),),
+                      SizedBox(width: 5,),
+                      Text(
+                      '${currencyPair.change.toStringAsFixed(2)}%',
+                      style: TextStyle(
+                        color: currencyPair.change > 0 ? Colors.blue : Colors.red,
+                      ),),
+                    ],
+                  ),
+                      Text(currencyPair.name,style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.bold)),
+                      Row(
+                        children: [
+                          Text('${currencyPair.time}',style: TextStyle(color: Colors.white)),
+                          SizedBox(width: 6,),
+                          Transform.rotate(
+                            angle: math.pi / 2, // Rotate 90 degrees (in radians)
+                            child: Text(
+                              '][', // The text you want to rotate
+                              style: TextStyle(fontSize: 12,color: Colors.grey), // Adjust size as needed
+                            ),),
+                          SizedBox(width: 6,),
+                          Text('${currencyPair.total}',style: TextStyle(color: Colors.white),),
+                        ],
+                      ),
+                    ],
+                  ),
 
-                ),),
-              SizedBox(width: 5,),
-              Text(
-              '${currencyPair.change.toStringAsFixed(2)}%',
-              style: TextStyle(
-                color: currencyPair.change > 0 ? Colors.green : Colors.red,
-              ),),
-            ],
-          ),
-              Text(currencyPair.name),
-            ],
-          ),
-          subtitle: Row(
-            children: [
-              Text('${currencyPair.time}'),
-          SizedBox(width: 6,),
-          Transform.rotate(
-            angle: math.pi / 2, // Rotate 90 degrees (in radians)
-            child: Text(
-              '][', // The text you want to rotate
-              style: TextStyle(fontSize: 15), // Adjust size as needed
-            ),),
-              SizedBox(width: 6,),
-              Text('${currencyPair.total}'),
-            ],
-          ),
 
-          trailing: RichText(
-        text: TextSpan(
-        style: TextStyle(
-        fontSize: 24, // Set base font size for the main text
-        color: Colors.black, // Text color
-        ),
-        children: <TextSpan>[
-        TextSpan(text: mainPart, style: TextStyle(fontSize: 24)), // Main part
-        TextSpan(
-        text: lastTwoDigits,
-        style: TextStyle(fontSize: 36), // Larger font size for the last two digits
-        ), // Power part
-        TextSpan(
-        text: '^${currencyPair.total}', // Display the power value
-        style: TextStyle(fontSize: 16), // Smaller font size for power
-        ),
-        ],
-        )),
-          onTap: () {
-            // Navigate to currency pair details screen
-          },
-        );
-      },
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              style: TextStyle(
+                                fontSize: 24, // Base font size for the main text
+                                color: Colors.black, // Text color
+                              ),
+                              children: <InlineSpan>[  // Use InlineSpan instead of TextSpan
+                                TextSpan(
+                                  text: mainPart,
+                                  style: TextStyle(fontSize: 18,color: Colors.blue), // Main part
+                                ),
+                                TextSpan(
+                                  text: lastTwoDigits, // The first digit of lastTwoDigits
+                                  style: TextStyle(fontSize: 26,color: Colors.blue), // Larger font size for this part
+                                ),
+                                WidgetSpan(
+                                  child: Transform.translate(
+                                    offset: const Offset(2, -18), // Adjust the offset to position superscript
+                                    child: Text(
+                                      lastTwoDigits[1], // The second digit, shown as superscript
+                                      textScaleFactor: 1, // Scale down the superscript
+                                      style: TextStyle(color: Colors.black,fontSize: 12),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 10,),
+                          RichText(
+                            text: TextSpan(
+                              // style: TextStyle(
+                              //   fontSize: 24, // Base font size for the main text
+                              //   color: Colors.black, // Text color
+                              //),
+                              children: <InlineSpan>[  // Use InlineSpan instead of TextSpan
+                                TextSpan(
+                                  text: mainPart,
+                                  style: TextStyle(fontSize: 18,color: Colors.blue), // Main part
+                                ),
+                                TextSpan(
+                                  text: lastTwoDigits, // The first digit of lastTwoDigits
+                                  style: TextStyle(fontSize: 26,color: Colors.blue), // Larger font size for this part
+                                ),
+                                WidgetSpan(
+                                  child: Transform.translate(
+                                    offset: const Offset(2, -18), // Adjust the offset to position superscript
+                                    child: Text(
+                                      lastTwoDigits[1], // The second digit, shown as superscript
+                                      textScaleFactor: 1, // Scale down the superscript
+                                      style: TextStyle(color: Colors.blue,fontSize: 12),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Text('L:${currencyPair.ask}',style: TextStyle(color: Colors.grey),),
+                          SizedBox(width: 30,),
+                          Text('R:${currencyPair.ask}',style: TextStyle(color: Colors.grey)),
+                        ],
+                      ),
+                    ],
+                  ),
+
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
+  String extractBase(double value) {
+    String valueStr = value.toStringAsFixed(3); // Ensure 3 decimal places
+    return valueStr.substring(0, valueStr.length - 2);
+  }
+
+  String extractLastTwoDigits(double value) {
+    String valueStr = value.toStringAsFixed(3);
+    return valueStr.substring(valueStr.length - 2);
+  }
+
 }
 
-Widget _buildFormattedText(String value) {
-  // Split the string into whole and decimal parts
-  final parts = value.split('.');
-  final wholeNumber = parts[0]; // The part before the decimal
-  final decimalPart = parts.length > 1 ? parts[1] : ''; // The part after the decimal
 
-  // Get the last two digits of the decimal part
-  String lastTwoDigits = decimalPart.length >= 2 ? decimalPart.substring(decimalPart.length - 2) : decimalPart;
-
-  // Get the rest of the decimal part excluding the last two digits
-  String restDecimal = decimalPart.length > 2 ? decimalPart.substring(0, decimalPart.length - 2) : '';
-
-  return RichText(
-    text: TextSpan(
-      children: [
-        TextSpan(
-          text: wholeNumber, // Whole number part
-          style: TextStyle(
-            fontSize: 48, // Standard size for whole number
-            color: Colors.black,
-          ),
-        ),
-        TextSpan(
-          text: restDecimal, // Rest of the decimal part (if any)
-          style: TextStyle(
-            fontSize: 24, // Smaller size for the rest of the decimal part
-            color: Colors.black,
-          ),
-        ),
-        TextSpan(
-          text: lastTwoDigits, // Last two digits larger
-          style: TextStyle(
-            fontSize: 48, // Larger size for the last two digits
-            color: Colors.black,
-          ),
-        ),
-      ],
-    ),
-  );
-}
 
 
 class HomePage extends StatelessWidget {
@@ -412,8 +452,11 @@ class HomePage extends StatelessWidget {
     ];
 
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Financial Trading App'),
+        elevation: 0,
+        backgroundColor: Colors.black,
+        title: const Text('Financial Trading App',style: TextStyle(color: Colors.grey),),
       ),
       body: CurrencyPairList(currencyPairs: currencyPairs),
     );
